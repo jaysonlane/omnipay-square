@@ -37,20 +37,22 @@ class WebPaymentRequest extends AbstractRequest
 
         $items_list = array();
 
-        foreach ($items as $index => $item) {
-            $items_list[$index] = new SquareConnect\Model\OrderLineItem(
-                array(
-                    'name' => $item->getName(),
-                    'quantity' => strval($item->getQuantity()),
-                    'base_price_money' => new SquareConnect\Model\Money(
-                        array(
-                            'amount' => intval($item->getPrice()*100),
-                            'currency' => $this->getCurrency()
+        if (count($items) > 0) {
+            foreach ($items as $index => $item) {
+                $items_list[$index] = new SquareConnect\Model\OrderLineItem(
+                    array(
+                        'name' => $item->getName(),
+                        'quantity' => strval($item->getQuantity()),
+                        'base_price_money' => new SquareConnect\Model\Money(
+                            array(
+                                'amount' => intval($item->getPrice()*100),
+                                'currency' => $this->getCurrency()
+                            )
                         )
                     )
-                )
-            );
-        }
+                );
+            }            
+        } 
 
         $data_array = array(
             'idempotency_key' => uniqid(),
